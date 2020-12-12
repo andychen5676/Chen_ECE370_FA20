@@ -1,0 +1,143 @@
+#!/usr/bin/env bash
+INSTALL_DIR=/home/user/etc
+PROJECT_NAME=chen-chen
+INSTALL_BIN=/home/user/bin
+BIN_NAME=chen-chen
+export PATH="$PATH:$INSTALL_BIN"
+
+Install()
+{
+    # make folder for install
+    mkdir -p $INSTALL_DIR/$PROJECT_NAME
+    mkdir -p $INSTALL_BIN
+
+    # put out bin into bin 
+    cp $BIN_NAME $INSTALL_BIN/
+
+    # put all install files in etc
+    cp -r * $INSTALL_DIR/$PROJECT_NAME/
+
+    export PATH="$PATH:$INSTALL_BIN"
+}
+
+Uninstall()
+{
+    rm -r $INSTALL_DIR/$PROJECT_NAME
+    rm $INSTALL_BIN/$BIN_NAME
+    
+}
+
+Start()
+{
+    cd $INSTALL_DIR/$PROJECT_NAME
+    #load the environment
+    ./final.sh
+    echo "============== World Loaded =============="
+    #load the robot
+    ./load_robot.sh
+    echo "============== Robot Loaded =============="
+
+}
+
+Stop()
+{
+    cd $INSTALL_DIR/$PROJECT_NAME
+    #remove the robot
+    ./rmRobot.sh
+    echo "============= Robot Removed =============="
+    #remove the World
+    ./rmWorld.sh
+    echo "============= World Removed =============="
+}
+
+Reload()
+{
+    cd $INSTALL_DIR/$PROJECT_NAME
+    #reset the robot
+    ./load_robot.sh
+    echo "============== Robot Reset ==============="
+}
+
+Test()
+{
+    cd $INSTALL_DIR/$PROJECT_NAME
+    #test the environment
+    ./final_test.sh
+    echo "============== Test Object Dropped ==============="
+
+}
+
+Reset()
+{
+    cd $INSTALL_DIR/$PROJECT_NAME
+    #remove test item
+    ./rmTest.sh
+    echo "============== Test Object Removed ==============="
+}
+
+Activate()
+{
+    cd $INSTALL_DIR/$PROJECT_NAME
+    #start the controller
+    echo "============== Controller Activated ================"
+    python rbtcontrol.py
+}
+
+Help()
+{
+    echo '  '
+    echo '  '
+    echo '----------------------------------------------------------'
+    echo '-------------ECE 370 Final Project------------------------'
+    echo '--------------------Chen Chen-----------------------------'
+    echo '----------------------------------------------------------'
+    echo 'install       :   install the program                     '
+    echo 'uninstall     :   uninstall the program                   '
+    echo 'start         :   start the program                       '
+    echo 'stop          :   stop the program                        '
+    echo 'activate      :   activate the controller                 '
+    echo 'reload        :   reset the robot location                '
+    echo 'test          :   test the world load succeed             '
+    echo 'reset         :   remove the test object                  '
+    echo 'help          :   shows the dialog                        '
+    echo '----------------------------------------------------------'
+    echo '----------------------------------------------------------'
+    echo '----------------------------------------------------------'
+    echo '  '
+    echo '  '
+}
+
+
+case $1 in 
+'install')
+    Install
+    ;;
+'uninstall')
+    Uninstall
+    ;;
+'start')
+    Start
+    ;;
+'stop')
+    Stop
+    ;;
+'reload')
+    Reload
+    ;;
+'activate')
+    Activate
+    ;;
+'test')
+    Test
+    ;;
+'reset')
+    Reset
+    ;;
+'help')
+    Help
+    ;;
+*)
+    Help
+    ;;
+    esac
+exit 0
